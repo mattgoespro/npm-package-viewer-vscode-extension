@@ -3,7 +3,11 @@
   "displayName": "NPM Package Viewer",
   "description": "Open npm package pages from import statements — in your browser or inside VS Code.",
   "version": "1.0.0",
-  "publisher": "npm-package-viewer",
+  "publisher": "mattgoespro",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/mattgoespro/npm-package-viewer-vscode-extension.git"
+  },
   "license": "MIT",
   "icon": "images/icon.png",
   "galleryBanner": {
@@ -17,7 +21,10 @@
     "require",
     "module",
     "viewer",
-    "registry"
+    "registry",
+    "browser",
+    "vscode",
+    "editor"
   ],
   "engines": {
     "vscode": "^1.85.0"
@@ -129,13 +136,13 @@
     "test": "node ./out-test/test/runTest.js"
   },
   "devDependencies": {
-    "@types/mocha": "^10.0.6",
-    "@types/node": "^20.11.0",
-    "@types/vscode": "^1.85.0",
-    "@vscode/test-electron": "^2.3.8",
+    "@types/mocha": "^10.0.10",
+    "@types/node": "^25.5.2",
+    "@types/vscode": "^1.110.0",
+    "@vscode/test-electron": "^2.5.2",
     "@vscode/vsce": "^3.7.1",
-    "esbuild": "^0.20.0",
-    "mocha": "^10.3.0",
-    "typescript": "^5.3.3"
+    "esbuild": "^0.28.0",
+    "mocha": "^11.7.5",
+    "typescript": "^6.0.2"
   }
 }
