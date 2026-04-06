@@ -1,20 +1,24 @@
 import * as vscode from "vscode";
 import * as https from "node:https";
+import { marked } from "marked";
 
 let currentPanel: vscode.WebviewPanel | undefined;
 
-interface RegistryData {
+interface RegistryVersionData {
   name: string;
   version: string;
   description?: string;
   license?: string;
   homepage?: string;
   repository?: { url?: string };
-  readme?: string;
   keywords?: string[];
 }
 
-function fetchJson(url: string): Promise<RegistryData> {
+interface RegistryFullData extends RegistryVersionData {
+  readme?: string;
+}
+
+function fetchJson<T>(url: string): Promise<T> {
   return new Promise((resolve, reject) => {
     https
       .get(url, { headers: { Accept: "application/json", "User-Agent": "VSCode-NPM-Package-Viewer" } }, (res) => {
@@ -33,10 +37,16 @@ function fetchJson(url: string): Promise<RegistryData> {
   });
 }
 
-async function fetchPackageData(packageName: string): Promise<RegistryData> {
+async function fetchPackageData(packageName: string): Promise<RegistryFullData> {
   const encoded = encodeURIComponent(packageName).replace("%40", "@");
-  const url = `https://registry.npmjs.org/${encoded}/latest`;
-  return fetchJson(url);
+
+  // Fetch both endpoints in parallel: /latest for metadata, root for readme
+  const [latest, full] = await Promise.all([
+    fetchJson<RegistryVersionData>(`https://registry.npmjs.org/${encoded}/latest`),
+    fetchJson<{ readme?: string }>(`https://registry.npmjs.org/${encoded}`),
+  ]);
+
+  return { ...latest, readme: full.readme };
 }
 
 /**
@@ -77,7 +87,7 @@ export async function createOrShowNpmWebview(
   }
 }
 
-function renderPackageHtml(data: RegistryData, npmUrl: string): string {
+function renderPackageHtml(data: RegistryFullData, npmUrl: string): string {
   const repoUrl = data.repository?.url
     ?.replace(/^git\+/, "")
     .replace(/\.git$/, "")
@@ -99,9 +109,10 @@ function renderPackageHtml(data: RegistryData, npmUrl: string): string {
     ...(data.keywords ?? []).slice(0, 8).map(k => `<span class="badge">${esc(k)}</span>`),
   ].filter(Boolean).join(" ");
 
-  // The readme from the registry is already HTML (rendered from markdown
-  // by npm's servers). Passing it through without escaping is intentional.
-  const readme = data.readme ?? "";
+  // The readme is raw markdown (possibly mixed with HTML).
+  // Convert it to HTML using marked.
+  const readmeRaw = data.readme ?? "";
+  const readme = marked.parse(readmeRaw) as string;
 
   return `<!DOCTYPE html>
 <html><head><meta charset="UTF-8">
