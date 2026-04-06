@@ -12,12 +12,15 @@ export function openInBrowser(): void {
 
   const doc = editor.document;
   const lineNumber = editor.selection.active.line;
-  const lines = Array.from({ length: doc.lineCount }, (_, i) => doc.lineAt(i).text);
+  const lines = Array.from(
+    { length: doc.lineCount },
+    (_, i) => doc.lineAt(i).text
+  );
   const result = extractPackageFromDocument(lines, lineNumber);
 
   if (!result) {
     vscode.window.showInformationMessage(
-      "No module import detected on this line.",
+      "No module import detected on this line."
     );
     return;
   }
@@ -25,7 +28,7 @@ export function openInBrowser(): void {
   const classification = classifyModule(
     result.rawSpecifier,
     result.packageName,
-    editor.document.uri,
+    editor.document.uri
   );
 
   if (classification.type !== "npm") {

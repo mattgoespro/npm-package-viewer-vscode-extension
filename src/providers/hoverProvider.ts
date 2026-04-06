@@ -8,13 +8,16 @@ export class NpmHoverProvider implements vscode.HoverProvider {
   provideHover(
     document: vscode.TextDocument,
     position: vscode.Position,
-    _token: vscode.CancellationToken,
+    _token: vscode.CancellationToken
   ): vscode.Hover | null {
     if (!getConfig().showHover) {
       return null;
     }
 
-    const lines = Array.from({ length: document.lineCount }, (_, i) => document.lineAt(i).text);
+    const lines = Array.from(
+      { length: document.lineCount },
+      (_, i) => document.lineAt(i).text
+    );
     const result = extractPackageFromDocument(lines, position.line);
 
     if (!result) {
@@ -24,7 +27,7 @@ export class NpmHoverProvider implements vscode.HoverProvider {
     const classification = classifyModule(
       result.rawSpecifier,
       result.packageName,
-      document.uri,
+      document.uri
     );
 
     const md = new vscode.MarkdownString();
@@ -35,14 +38,18 @@ export class NpmHoverProvider implements vscode.HoverProvider {
       md.appendMarkdown(`**📦 ${classification.packageName}**\n\n`);
       md.appendMarkdown(
         `[Open in Browser](${url}) · ` +
-          `[Open in VS Code](command:npmPackageViewer.openInWebview "View in VS Code")`,
+          `[Open in VS Code](command:npmPackageViewer.openInWebview "View in VS Code")`
       );
     } else if (classification.type === "node-builtin") {
-      md.appendMarkdown(`**Node.js built-in:** \`${classification.packageName}\``);
+      md.appendMarkdown(
+        `**Node.js built-in:** \`${classification.packageName}\``
+      );
     } else if (classification.type === "relative") {
       md.appendMarkdown(`**Relative import:** \`${result.rawSpecifier}\``);
     } else if (classification.type === "ts-alias") {
-      md.appendMarkdown(`**TypeScript path alias:** \`${result.rawSpecifier}\``);
+      md.appendMarkdown(
+        `**TypeScript path alias:** \`${result.rawSpecifier}\``
+      );
     }
 
     return new vscode.Hover(md, document.lineAt(position.line).range);

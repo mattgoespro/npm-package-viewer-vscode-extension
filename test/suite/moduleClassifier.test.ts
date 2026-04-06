@@ -33,11 +33,7 @@ suite("moduleClassifier", () => {
   });
 
   test("classifies scoped npm package", () => {
-    const result = classifyModule(
-      "@angular/core",
-      "@angular/core",
-      fakeUri,
-    );
+    const result = classifyModule("@angular/core", "@angular/core", fakeUri);
     assert.strictEqual(result.type, "npm");
     assert.strictEqual(result.packageName, "@angular/core");
   });

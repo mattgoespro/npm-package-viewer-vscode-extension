@@ -28,7 +28,7 @@ function registerHoverProvider(): void {
   if (getConfig().showHover) {
     hoverDisposable = vscode.languages.registerHoverProvider(
       LANGUAGE_SELECTOR,
-      new NpmHoverProvider(),
+      new NpmHoverProvider()
     );
   }
 }
@@ -38,7 +38,7 @@ function registerCodeLensProvider(): void {
   if (getConfig().showCodeLens) {
     codeLensDisposable = vscode.languages.registerCodeLensProvider(
       LANGUAGE_SELECTOR,
-      codeLensProvider,
+      codeLensProvider
     );
   }
 }
@@ -48,16 +48,16 @@ export function activate(context: vscode.ExtensionContext): void {
   context.subscriptions.push(
     vscode.commands.registerCommand(
       "npmPackageViewer.openInBrowser",
-      openInBrowser,
+      openInBrowser
     ),
     vscode.commands.registerCommand(
       "npmPackageViewer.openInWebview",
-      openInWebview,
+      openInWebview
     ),
     vscode.commands.registerCommand(
       "npmPackageViewer.goToPackageJson",
-      goToPackageJson,
-    ),
+      goToPackageJson
+    )
   );
 
   // Providers
@@ -73,7 +73,7 @@ export function activate(context: vscode.ExtensionContext): void {
         registerCodeLensProvider();
         codeLensEmitter.fire();
       }
-    }),
+    })
   );
 }
 

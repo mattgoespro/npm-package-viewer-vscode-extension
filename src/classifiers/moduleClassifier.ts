@@ -16,7 +16,7 @@ export interface ModuleClassification {
 export function classifyModule(
   rawSpecifier: string,
   packageName: string,
-  documentUri: vscode.Uri,
+  documentUri: vscode.Uri
 ): ModuleClassification {
   // 1. Relative imports
   if (rawSpecifier.startsWith(".") || rawSpecifier.startsWith("/")) {

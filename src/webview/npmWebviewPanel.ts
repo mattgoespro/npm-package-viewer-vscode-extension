@@ -7,12 +7,12 @@ import * as vscode from "vscode";
  */
 export async function createOrShowNpmWebview(
   _packageName: string,
-  npmUrl: string,
+  npmUrl: string
 ): Promise<void> {
   await vscode.commands.executeCommand(
     "simpleBrowser.api.open",
     vscode.Uri.parse(npmUrl),
-    { viewColumn: vscode.ViewColumn.Beside },
+    { viewColumn: vscode.ViewColumn.Beside }
   );
 }
 

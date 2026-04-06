@@ -37,7 +37,7 @@ suite("tsAliasResolver", () => {
     };
     fs.writeFileSync(
       path.join(tmpDir, "tsconfig.json"),
-      JSON.stringify(tsconfig),
+      JSON.stringify(tsconfig)
     );
 
     // Create a subdirectory to simulate project structure
@@ -61,7 +61,7 @@ suite("tsAliasResolver", () => {
     };
     fs.writeFileSync(
       path.join(tmpDir, "tsconfig.json"),
-      JSON.stringify(tsconfig),
+      JSON.stringify(tsconfig)
     );
 
     const uri = vscode.Uri.file(path.join(tmpDir, "src", "index.ts"));
@@ -90,11 +90,11 @@ suite("tsAliasResolver", () => {
     };
     fs.writeFileSync(
       path.join(tmpDir, "base.json"),
-      JSON.stringify(baseConfig),
+      JSON.stringify(baseConfig)
     );
     fs.writeFileSync(
       path.join(tmpDir, "tsconfig.json"),
-      JSON.stringify(childConfig),
+      JSON.stringify(childConfig)
     );
 
     const uri = vscode.Uri.file(path.join(tmpDir, "index.ts"));

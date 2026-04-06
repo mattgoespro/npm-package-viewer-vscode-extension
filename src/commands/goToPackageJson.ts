@@ -9,7 +9,7 @@ import { classifyModule } from "../classifiers/moduleClassifier.js";
  */
 function findPackageJson(startDir: string): string | null {
   let current = startDir;
-  // eslint-disable-next-line no-constant-condition
+
   while (true) {
     const candidate = path.join(current, "package.json");
     if (fs.existsSync(candidate)) {
@@ -41,13 +41,13 @@ export async function goToPackageJson(): Promise<void> {
   const lineNumber = editor.selection.active.line;
   const docLines = Array.from(
     { length: doc.lineCount },
-    (_, i) => doc.lineAt(i).text,
+    (_, i) => doc.lineAt(i).text
   );
   const result = extractPackageFromDocument(docLines, lineNumber);
 
   if (!result) {
     vscode.window.showInformationMessage(
-      "No module import detected on this line.",
+      "No module import detected on this line."
     );
     return;
   }
@@ -55,12 +55,12 @@ export async function goToPackageJson(): Promise<void> {
   const classification = classifyModule(
     result.rawSpecifier,
     result.packageName,
-    editor.document.uri,
+    editor.document.uri
   );
 
   if (classification.type !== "npm") {
     vscode.window.showInformationMessage(
-      classification.message ?? "This module is not an npm package.",
+      classification.message ?? "This module is not an npm package."
     );
     return;
   }
@@ -106,7 +106,7 @@ export async function goToPackageJson(): Promise<void> {
 
   if (targetLine === -1) {
     vscode.window.showInformationMessage(
-      `'${pkgName}' was not found in ${path.basename(packageJsonPath)}.`,
+      `'${pkgName}' was not found in ${path.basename(packageJsonPath)}.`
     );
     return;
   }
@@ -117,6 +117,6 @@ export async function goToPackageJson(): Promise<void> {
   editorView.selection = new vscode.Selection(position, position);
   editorView.revealRange(
     new vscode.Range(position, position),
-    vscode.TextEditorRevealType.InCenter,
+    vscode.TextEditorRevealType.InCenter
   );
 }

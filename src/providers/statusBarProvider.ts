@@ -6,16 +6,16 @@ import { getConfig } from "../utils/config.js";
 let statusBarItem: vscode.StatusBarItem | undefined;
 
 export function createStatusBarProvider(
-  context: vscode.ExtensionContext,
+  context: vscode.ExtensionContext
 ): void {
   statusBarItem = vscode.window.createStatusBarItem(
     vscode.StatusBarAlignment.Left,
-    100,
+    100
   );
   context.subscriptions.push(statusBarItem);
 
   context.subscriptions.push(
-    vscode.window.onDidChangeTextEditorSelection(onSelectionChange),
+    vscode.window.onDidChangeTextEditorSelection(onSelectionChange)
   );
 
   // Trigger initial update
@@ -28,9 +28,7 @@ export function createStatusBarProvider(
   }
 }
 
-function onSelectionChange(
-  event: vscode.TextEditorSelectionChangeEvent,
-): void {
+function onSelectionChange(event: vscode.TextEditorSelectionChangeEvent): void {
   if (!statusBarItem) {
     return;
   }
@@ -43,7 +41,10 @@ function onSelectionChange(
   const editor = event.textEditor;
   const doc = editor.document;
   const lineNumber = editor.selection.active.line;
-  const lines = Array.from({ length: doc.lineCount }, (_, i) => doc.lineAt(i).text);
+  const lines = Array.from(
+    { length: doc.lineCount },
+    (_, i) => doc.lineAt(i).text
+  );
   const result = extractPackageFromDocument(lines, lineNumber);
 
   if (!result) {
@@ -54,7 +55,7 @@ function onSelectionChange(
   const classification = classifyModule(
     result.rawSpecifier,
     result.packageName,
-    editor.document.uri,
+    editor.document.uri
   );
 
   if (classification.type === "npm") {

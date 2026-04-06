@@ -8,12 +8,10 @@ const esmStaticImport =
   /import\s+(?:type\s+)?(?:(?:[\w*{}\s,]+)\s+from\s+)?['"](?<module>[^'"]+)['"]/;
 
 // ESM dynamic: import("module")
-const esmDynamicImport =
-  /import\s*\(\s*['"](?<module>[^'"]+)['"]\s*\)/;
+const esmDynamicImport = /import\s*\(\s*['"](?<module>[^'"]+)['"]\s*\)/;
 
 // CommonJS: require("module")
-const commonjsRequire =
-  /require\s*\(\s*['"](?<module>[^'"]+)['"]\s*\)/;
+const commonjsRequire = /require\s*\(\s*['"](?<module>[^'"]+)['"]\s*\)/;
 
 // Re-exports: export ... from "module" / export * from "module"
 const esmReExport =

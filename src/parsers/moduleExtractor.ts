@@ -26,7 +26,11 @@ export function extractModuleSpecifier(line: string): string | null {
   const trimmed = line.trimStart();
 
   // Skip single-line comment lines
-  if (trimmed.startsWith("//") || trimmed.startsWith("*") || trimmed.startsWith("/*")) {
+  if (
+    trimmed.startsWith("//") ||
+    trimmed.startsWith("*") ||
+    trimmed.startsWith("/*")
+  ) {
     return null;
   }
 
@@ -56,8 +60,7 @@ export function extractPackageFromLine(line: string): PackageInfo | null {
 
 // ── Multi-line import support ────────────────────────────────────
 
-const IMPORT_START_RE =
-  /^\s*(?:import\b|export\b|(?:const|let|var)\s+)/;
+const IMPORT_START_RE = /^\s*(?:import\b|export\b|(?:const|let|var)\s+)/;
 
 /**
  * Check if a line begins an import/require/export statement.
@@ -72,7 +75,7 @@ function isImportStart(line: string): boolean {
  */
 export function extractPackageFromDocument(
   lines: readonly string[],
-  lineNumber: number,
+  lineNumber: number
 ): PackageInfo | null {
   // Fast path: single-line extraction
   const singleLine = extractPackageFromLine(lines[lineNumber]);
@@ -96,7 +99,7 @@ export function extractPackageFromDocument(
  */
 function resolveMultiLineImport(
   lines: readonly string[],
-  lineNumber: number,
+  lineNumber: number
 ): string | null {
   // Search backward (max 30 lines) for the import/export/require start
   let startLine = -1;
@@ -146,7 +149,9 @@ function isStatementBoundary(trimmedLine: string): boolean {
     return true;
   }
   // Function/class/if/for/etc. start
-  if (/^(?:function|class|if|for|while|switch|return|throw)\b/.test(trimmedLine)) {
+  if (
+    /^(?:function|class|if|for|while|switch|return|throw)\b/.test(trimmedLine)
+  ) {
     return true;
   }
   return false;

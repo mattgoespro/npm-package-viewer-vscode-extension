@@ -46,26 +46,26 @@ The current package name is shown in the status bar when your cursor is on an im
 
 ## Supported Import Syntaxes
 
-| Syntax | Example |
-|--------|---------|
-| ESM default import | `import lodash from "lodash"` |
-| ESM named import | `import { useState } from "react"` |
-| ESM namespace import | `import * as fs from "node:fs"` |
-| ESM side-effect import | `import "reflect-metadata"` |
-| ESM type import | `import type { FC } from "react"` |
-| Dynamic import | `const m = await import("chalk")` |
-| CommonJS require | `const express = require("express")` |
-| Re-export | `export { foo } from "bar"` |
+| Syntax                 | Example                              |
+| ---------------------- | ------------------------------------ |
+| ESM default import     | `import lodash from "lodash"`        |
+| ESM named import       | `import { useState } from "react"`   |
+| ESM namespace import   | `import * as fs from "node:fs"`      |
+| ESM side-effect import | `import "reflect-metadata"`          |
+| ESM type import        | `import type { FC } from "react"`    |
+| Dynamic import         | `const m = await import("chalk")`    |
+| CommonJS require       | `const express = require("express")` |
+| Re-export              | `export { foo } from "bar"`          |
 
 ## Configuration
 
-| Setting | Default | Description |
-|---------|---------|-------------|
-| `npmPackageViewer.defaultAction` | `"browser"` | Default action: `"browser"` or `"webview"` |
-| `npmPackageViewer.registryUrl` | `"https://www.npmjs.com"` | Base URL of the npm registry to link to |
-| `npmPackageViewer.showCodeLens` | `true` | Show CodeLens above import lines |
-| `npmPackageViewer.showHover` | `true` | Show hover information on import lines |
-| `npmPackageViewer.showStatusBarItem` | `true` | Show package name in the status bar |
+| Setting                              | Default                   | Description                                |
+| ------------------------------------ | ------------------------- | ------------------------------------------ |
+| `npmPackageViewer.defaultAction`     | `"browser"`               | Default action: `"browser"` or `"webview"` |
+| `npmPackageViewer.registryUrl`       | `"https://www.npmjs.com"` | Base URL of the npm registry to link to    |
+| `npmPackageViewer.showCodeLens`      | `true`                    | Show CodeLens above import lines           |
+| `npmPackageViewer.showHover`         | `true`                    | Show hover information on import lines     |
+| `npmPackageViewer.showStatusBarItem` | `true`                    | Show package name in the status bar        |
 
 ## License
 

@@ -18,7 +18,7 @@ const cache = new Map<string, TsConfigCache>();
  */
 function findTsConfig(dir: string): string | null {
   let current = dir;
-  // eslint-disable-next-line no-constant-condition
+
   while (true) {
     const candidate = path.join(current, "tsconfig.json");
     if (fs.existsSync(candidate)) {
@@ -132,12 +132,12 @@ function getAliasPrefixes(documentUri: vscode.Uri): string[] {
  */
 export function isPathAlias(
   moduleSpecifier: string,
-  documentUri: vscode.Uri,
+  documentUri: vscode.Uri
 ): boolean {
   const prefixes = getAliasPrefixes(documentUri);
   return prefixes.some(
     (prefix) =>
-      moduleSpecifier === prefix || moduleSpecifier.startsWith(prefix + "/"),
+      moduleSpecifier === prefix || moduleSpecifier.startsWith(prefix + "/")
   );
 }
 

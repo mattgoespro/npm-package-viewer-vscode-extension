@@ -9,14 +9,17 @@ import { getConfig } from "../utils/config.js";
 export class NpmCodeLensProvider implements vscode.CodeLensProvider {
   provideCodeLenses(
     document: vscode.TextDocument,
-    _token: vscode.CancellationToken,
+    _token: vscode.CancellationToken
   ): vscode.CodeLens[] {
     if (!getConfig().showCodeLens) {
       return [];
     }
 
     const lenses: vscode.CodeLens[] = [];
-    const lines = Array.from({ length: document.lineCount }, (_, i) => document.lineAt(i).text);
+    const lines = Array.from(
+      { length: document.lineCount },
+      (_, i) => document.lineAt(i).text
+    );
 
     for (let i = 0; i < document.lineCount; i++) {
       // Only place CodeLens on the first line of an import statement
@@ -33,7 +36,7 @@ export class NpmCodeLensProvider implements vscode.CodeLensProvider {
       const classification = classifyModule(
         result.rawSpecifier,
         result.packageName,
-        document.uri,
+        document.uri
       );
 
       const range = document.lineAt(i).range;
@@ -49,7 +52,7 @@ export class NpmCodeLensProvider implements vscode.CodeLensProvider {
             title: "View in VS Code",
             command: "npmPackageViewer.openInWebview",
             tooltip: `View ${classification.packageName} in VS Code`,
-          }),
+          })
         );
       } else if (classification.type === "node-builtin") {
         lenses.push(
@@ -57,7 +60,7 @@ export class NpmCodeLensProvider implements vscode.CodeLensProvider {
             title: "Node.js built-in",
             command: "",
             tooltip: `${classification.packageName} is a Node.js built-in module`,
-          }),
+          })
         );
       }
       // Relative imports and TS aliases: no CodeLens
