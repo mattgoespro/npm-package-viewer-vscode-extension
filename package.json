@@ -2,14 +2,29 @@
   "name": "npm-package-viewer",
   "displayName": "NPM Package Viewer",
   "description": "Open npm package pages from import statements — in your browser or inside VS Code.",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "publisher": "npm-package-viewer",
   "license": "MIT",
+  "icon": "images/icon.png",
+  "galleryBanner": {
+    "color": "#cb3837",
+    "theme": "dark"
+  },
+  "keywords": [
+    "npm",
+    "package",
+    "import",
+    "require",
+    "module",
+    "viewer",
+    "registry"
+  ],
   "engines": {
     "vscode": "^1.85.0"
   },
   "categories": [
-    "Other"
+    "Other",
+    "Programming Languages"
   ],
   "activationEvents": [
     "onLanguage:javascript",
@@ -105,7 +120,8 @@
     }
   },
   "scripts": {
-    "vscode:prepublish": "npm run build",
+    "vscode:prepublish": "npm run package",
+    "package": "esbuild ./src/extension.ts --bundle --outfile=dist/extension.js --external:vscode --format=cjs --platform=node --minify",
     "build": "esbuild ./src/extension.ts --bundle --outfile=dist/extension.js --external:vscode --format=cjs --platform=node --sourcemap",
     "watch": "esbuild ./src/extension.ts --bundle --outfile=dist/extension.js --external:vscode --format=cjs --platform=node --sourcemap --watch",
     "lint": "tsc --noEmit",
@@ -117,6 +133,7 @@
     "@types/node": "^20.11.0",
     "@types/vscode": "^1.85.0",
     "@vscode/test-electron": "^2.3.8",
+    "@vscode/vsce": "^3.7.1",
     "esbuild": "^0.20.0",
     "mocha": "^10.3.0",
     "typescript": "^5.3.3"

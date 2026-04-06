@@ -1,9 +1,15 @@
 # Changelog
 
-## 0.0.1
+## 1.0.0
 
-- Initial release
-- Context menu commands: "Open npm Page in Browser" and "Open npm Page in VS Code"
-- Module detection for ESM, CommonJS, dynamic imports, and re-exports
-- Classification of Node.js built-ins, relative imports, and TypeScript path aliases
-- Webview panel for viewing npm pages inside VS Code
+### Features
+
+- **Context menu commands** — "Open npm Page in Browser", "Open npm Page in VS Code", and "Go to package.json Dependency"
+- **CodeLens** — Inline links above import statements to open packages on npm or in VS Code
+- **Hover provider** — Hover over imports for package info and quick action links
+- **Status bar** — Shows the current package name when the cursor is on an import line
+- **Smart module detection** — ESM `import`, CommonJS `require()`, dynamic `import()`, and re-exports
+- **Multi-line import support** — Resolves module names from within multi-line import blocks
+- **Module classification** — Detects and labels Node.js built-ins, relative imports, and TypeScript path aliases
+- **Scoped packages** — Handles `@scope/package` and deep imports
+- **Configurable** — Toggle CodeLens, hover, and status bar; choose default action; set custom registry URL

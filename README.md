@@ -1,29 +1,48 @@
 # NPM Package Viewer
 
-A Visual Studio Code extension that lets you open the npm package page for any module import — right from the editor context menu.
+Open npm package pages directly from your import statements — in your default browser or inside VS Code.
 
 ## Features
 
-- **Open in Browser** — Opens the npm page for the module on the current line in your default browser.
-- **Open in VS Code** — Opens the npm page in a VS Code webview panel alongside your code.
-- **Smart detection** — Recognizes ESM `import`, CommonJS `require()`, dynamic `import()`, and `export ... from` re-exports.
-- **Graceful handling** of non-npm modules:
-  - **Node.js built-ins** (e.g., `node:fs`, `path`) — shows an informational message.
-  - **Relative imports** (e.g., `./utils`) — shows an informational message.
-  - **TypeScript path aliases** (e.g., `@app/services`) — detects aliases from `tsconfig.json` paths.
-- Supports **JavaScript**, **TypeScript**, **JSX**, and **TSX** files.
-- Handles **scoped packages** (`@scope/package`) and **deep imports** (`lodash/fp`).
+### 📦 Context Menu & Commands
 
-## Usage
+Right-click on any import line to access the **NPM Package Viewer** submenu:
 
-1. Place your cursor on a line that contains a module import or require statement.
-2. Right-click to open the context menu.
-3. Look for the **NPM Package Viewer** submenu.
-4. Choose **Open npm Page in Browser** or **Open npm Page in VS Code**.
+- **Open npm Page in Browser** — Opens the package on npmjs.com in your default browser
+- **Open npm Page in VS Code** — Opens the package page in an embedded VS Code browser tab
+- **Go to package.json Dependency** — Jumps to the package entry in your project's `package.json`
 
-You can also invoke these commands from the Command Palette (`Ctrl+Shift+P` / `Cmd+Shift+P`):
-- `NPM Package Viewer: Open npm Page in Browser`
-- `NPM Package Viewer: Open npm Page in VS Code`
+All commands are also available via the Command Palette (`Ctrl+Shift+P` / `Cmd+Shift+P`).
+
+### 🔍 CodeLens
+
+Inline "Open on npm ↗" and "View in VS Code" links appear above every import statement. Node.js built-in modules are labelled accordingly.
+
+### 💬 Hover Information
+
+Hover over any import to see the package name with quick-action links.
+
+### 📊 Status Bar
+
+The current package name is shown in the status bar when your cursor is on an import line. Click it to open the package.
+
+### 🧠 Smart Module Detection
+
+- **Supported syntaxes**: ESM `import`, CommonJS `require()`, dynamic `import()`, re-exports `export ... from`
+- **Multi-line imports**: Resolves the module name even when the cursor is inside a multi-line import block
+- **Scoped packages**: Handles `@scope/package` and deep imports like `lodash/fp`
+- **Graceful classification**:
+  - Node.js built-ins (`node:fs`, `path`) → informational message
+  - Relative imports (`./utils`) → informational message
+  - TypeScript path aliases (from `tsconfig.json` `paths`) → informational message
+  - Everything else → opens on npm
+
+## Supported Languages
+
+- JavaScript (`.js`)
+- TypeScript (`.ts`)
+- JSX (`.jsx`)
+- TSX (`.tsx`)
 
 ## Supported Import Syntaxes
 
@@ -38,17 +57,15 @@ You can also invoke these commands from the Command Palette (`Ctrl+Shift+P` / `C
 | CommonJS require | `const express = require("express")` |
 | Re-export | `export { foo } from "bar"` |
 
-## Development
+## Configuration
 
-```bash
-npm install
-npm run build    # Bundle with esbuild
-npm run watch    # Watch mode
-npm run lint     # Type-check
-npm test         # Run tests in VS Code Extension Host
-```
-
-Press **F5** in VS Code to launch the Extension Development Host for debugging.
+| Setting | Default | Description |
+|---------|---------|-------------|
+| `npmPackageViewer.defaultAction` | `"browser"` | Default action: `"browser"` or `"webview"` |
+| `npmPackageViewer.registryUrl` | `"https://www.npmjs.com"` | Base URL of the npm registry to link to |
+| `npmPackageViewer.showCodeLens` | `true` | Show CodeLens above import lines |
+| `npmPackageViewer.showHover` | `true` | Show hover information on import lines |
+| `npmPackageViewer.showStatusBarItem` | `true` | Show package name in the status bar |
 
 ## License
 

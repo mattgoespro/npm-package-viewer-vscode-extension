@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128">
+  <rect width="128" height="128" rx="16" fill="#cb3837"/>
+  <text x="64" y="56" text-anchor="middle" font-family="Arial, sans-serif" font-weight="bold" font-size="40" fill="#fff">npm</text>
+  <text x="64" y="98" text-anchor="middle" font-family="Arial, sans-serif" font-size="20" fill="#fff" opacity="0.9">↗ view</text>
+</svg>
