@@ -4,7 +4,7 @@ import { classifyModule } from "../classifiers/moduleClassifier.js";
 import { getNpmUrl } from "../utils/npmUrl.js";
 import { createOrShowNpmWebview } from "../webview/npmWebviewPanel.js";
 
-export function openInWebview(): void {
+export async function openInWebview(): Promise<void> {
   const editor = vscode.window.activeTextEditor;
   if (!editor) {
     vscode.window.showInformationMessage("No active editor.");
@@ -35,5 +35,5 @@ export function openInWebview(): void {
   }
 
   const url = getNpmUrl(classification.packageName);
-  createOrShowNpmWebview(classification.packageName, url);
+  await createOrShowNpmWebview(classification.packageName, url);
 }
