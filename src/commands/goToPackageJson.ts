@@ -1,7 +1,7 @@
 import * as vscode from "vscode";
 import * as path from "node:path";
 import * as fs from "node:fs";
-import { extractPackageFromLine } from "../parsers/moduleExtractor.js";
+import { extractPackageFromDocument } from "../parsers/moduleExtractor.js";
 import { classifyModule } from "../classifiers/moduleClassifier.js";
 
 /**
@@ -37,8 +37,13 @@ export async function goToPackageJson(): Promise<void> {
     return;
   }
 
-  const line = editor.document.lineAt(editor.selection.active.line).text;
-  const result = extractPackageFromLine(line);
+  const doc = editor.document;
+  const lineNumber = editor.selection.active.line;
+  const docLines = Array.from(
+    { length: doc.lineCount },
+    (_, i) => doc.lineAt(i).text,
+  );
+  const result = extractPackageFromDocument(docLines, lineNumber);
 
   if (!result) {
     vscode.window.showInformationMessage(
@@ -106,8 +111,8 @@ export async function goToPackageJson(): Promise<void> {
     return;
   }
 
-  const doc = await vscode.workspace.openTextDocument(packageJsonPath);
-  const editorView = await vscode.window.showTextDocument(doc);
+  const document = await vscode.workspace.openTextDocument(packageJsonPath);
+  const editorView = await vscode.window.showTextDocument(document);
   const position = new vscode.Position(targetLine, 0);
   editorView.selection = new vscode.Selection(position, position);
   editorView.revealRange(

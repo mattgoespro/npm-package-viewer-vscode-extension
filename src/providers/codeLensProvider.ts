@@ -1,5 +1,8 @@
 import * as vscode from "vscode";
-import { extractPackageFromLine } from "../parsers/moduleExtractor.js";
+import {
+  extractPackageFromDocument,
+  isImportStatementStart,
+} from "../parsers/moduleExtractor.js";
 import { classifyModule } from "../classifiers/moduleClassifier.js";
 import { getConfig } from "../utils/config.js";
 
@@ -13,10 +16,15 @@ export class NpmCodeLensProvider implements vscode.CodeLensProvider {
     }
 
     const lenses: vscode.CodeLens[] = [];
+    const lines = Array.from({ length: document.lineCount }, (_, i) => document.lineAt(i).text);
 
     for (let i = 0; i < document.lineCount; i++) {
-      const line = document.lineAt(i).text;
-      const result = extractPackageFromLine(line);
+      // Only place CodeLens on the first line of an import statement
+      if (!isImportStatementStart(lines[i])) {
+        continue;
+      }
+
+      const result = extractPackageFromDocument(lines, i);
 
       if (!result) {
         continue;

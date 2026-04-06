@@ -1,5 +1,5 @@
 import * as vscode from "vscode";
-import { extractPackageFromLine } from "../parsers/moduleExtractor.js";
+import { extractPackageFromDocument } from "../parsers/moduleExtractor.js";
 import { classifyModule } from "../classifiers/moduleClassifier.js";
 import { getNpmUrl } from "../utils/npmUrl.js";
 import { getConfig } from "../utils/config.js";
@@ -14,8 +14,8 @@ export class NpmHoverProvider implements vscode.HoverProvider {
       return null;
     }
 
-    const line = document.lineAt(position.line).text;
-    const result = extractPackageFromLine(line);
+    const lines = Array.from({ length: document.lineCount }, (_, i) => document.lineAt(i).text);
+    const result = extractPackageFromDocument(lines, position.line);
 
     if (!result) {
       return null;

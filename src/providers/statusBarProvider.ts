@@ -1,5 +1,5 @@
 import * as vscode from "vscode";
-import { extractPackageFromLine } from "../parsers/moduleExtractor.js";
+import { extractPackageFromDocument } from "../parsers/moduleExtractor.js";
 import { classifyModule } from "../classifiers/moduleClassifier.js";
 import { getConfig } from "../utils/config.js";
 
@@ -41,8 +41,10 @@ function onSelectionChange(
   }
 
   const editor = event.textEditor;
-  const line = editor.document.lineAt(editor.selection.active.line).text;
-  const result = extractPackageFromLine(line);
+  const doc = editor.document;
+  const lineNumber = editor.selection.active.line;
+  const lines = Array.from({ length: doc.lineCount }, (_, i) => doc.lineAt(i).text);
+  const result = extractPackageFromDocument(lines, lineNumber);
 
   if (!result) {
     statusBarItem.hide();

@@ -1,5 +1,5 @@
 import * as vscode from "vscode";
-import { extractPackageFromLine } from "../parsers/moduleExtractor.js";
+import { extractPackageFromDocument } from "../parsers/moduleExtractor.js";
 import { classifyModule } from "../classifiers/moduleClassifier.js";
 import { getNpmUrl } from "../utils/npmUrl.js";
 import { createOrShowNpmWebview } from "../webview/npmWebviewPanel.js";
@@ -11,8 +11,10 @@ export function openInWebview(): void {
     return;
   }
 
-  const line = editor.document.lineAt(editor.selection.active.line).text;
-  const result = extractPackageFromLine(line);
+  const doc = editor.document;
+  const lineNumber = editor.selection.active.line;
+  const lines = Array.from({ length: doc.lineCount }, (_, i) => doc.lineAt(i).text);
+  const result = extractPackageFromDocument(lines, lineNumber);
 
   if (!result) {
     vscode.window.showInformationMessage(

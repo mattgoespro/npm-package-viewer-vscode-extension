@@ -2,6 +2,7 @@ import * as assert from "assert";
 import {
   extractModuleSpecifier,
   extractPackageFromLine,
+  extractPackageFromDocument,
 } from "../../src/parsers/moduleExtractor";
 
 suite("moduleExtractor", () => {
@@ -203,6 +204,120 @@ suite("moduleExtractor", () => {
     test("returns null for no import", () => {
       const result = extractPackageFromLine("const x = 42;");
       assert.strictEqual(result, null);
+    });
+  });
+
+  suite("extractPackageFromDocument (multi-line)", () => {
+    test("resolves multi-line ESM named import from middle line", () => {
+      const lines = [
+        'import {',
+        '  KyInstance,',
+        '  Options as KyOptions,',
+        '  KyRequest,',
+        '} from "ky";',
+      ];
+      // Cursor on "KyInstance," line
+      const result = extractPackageFromDocument(lines, 1);
+      assert.ok(result);
+      assert.strictEqual(result.rawSpecifier, "ky");
+      assert.strictEqual(result.packageName, "ky");
+    });
+
+    test("resolves multi-line ESM import from closing brace line", () => {
+      const lines = [
+        'import {',
+        '  useState,',
+        '  useEffect,',
+        '} from "react";',
+      ];
+      const result = extractPackageFromDocument(lines, 3);
+      assert.ok(result);
+      assert.strictEqual(result.packageName, "react");
+    });
+
+    test("resolves multi-line ESM import from opening line", () => {
+      const lines = [
+        'import {',
+        '  useState,',
+        '} from "react";',
+      ];
+      const result = extractPackageFromDocument(lines, 0);
+      assert.ok(result);
+      assert.strictEqual(result.packageName, "react");
+    });
+
+    test("resolves multi-line CommonJS require", () => {
+      const lines = [
+        'const {',
+        '  readFile,',
+        '  writeFile,',
+        '} = require("fs");',
+      ];
+      const result = extractPackageFromDocument(lines, 1);
+      assert.ok(result);
+      assert.strictEqual(result.rawSpecifier, "fs");
+    });
+
+    test("resolves multi-line re-export", () => {
+      const lines = [
+        'export {',
+        '  foo,',
+        '  bar,',
+        '} from "@scope/pkg";',
+      ];
+      const result = extractPackageFromDocument(lines, 2);
+      assert.ok(result);
+      assert.strictEqual(result.packageName, "@scope/pkg");
+    });
+
+    test("resolves multi-line type import", () => {
+      const lines = [
+        'import type {',
+        '  FC,',
+        '  ReactNode,',
+        '} from "react";',
+      ];
+      const result = extractPackageFromDocument(lines, 1);
+      assert.ok(result);
+      assert.strictEqual(result.packageName, "react");
+    });
+
+    test("still works for single-line imports", () => {
+      const lines = [
+        'import express from "express";',
+        'const x = 42;',
+      ];
+      const result = extractPackageFromDocument(lines, 0);
+      assert.ok(result);
+      assert.strictEqual(result.packageName, "express");
+    });
+
+    test("returns null for non-import line not in any import block", () => {
+      const lines = [
+        'import express from "express";',
+        '',
+        'const x = 42;',
+      ];
+      const result = extractPackageFromDocument(lines, 2);
+      assert.strictEqual(result, null);
+    });
+
+    test("does not bleed across separate import statements", () => {
+      const lines = [
+        'import foo from "foo";',
+        '',
+        'import {',
+        '  bar,',
+        '} from "bar";',
+      ];
+      // Line 0 is its own import, line 3 belongs to the "bar" import
+      const result0 = extractPackageFromDocument(lines, 0);
+      assert.ok(result0);
+      assert.strictEqual(result0.packageName, "foo");
+
+      const result3 = extractPackageFromDocument(lines, 3);
+      assert.ok(result3);
+      assert.strictEqual(result3.packageName, "bar");
     });
   });
 });
