@@ -1,0 +1,77 @@
+{
+  "name": "npm-package-viewer",
+  "displayName": "NPM Package Viewer",
+  "description": "Open npm package pages from import statements — in your browser or inside VS Code.",
+  "version": "0.0.1",
+  "publisher": "npm-package-viewer",
+  "license": "MIT",
+  "engines": {
+    "vscode": "^1.85.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "activationEvents": [
+    "onLanguage:javascript",
+    "onLanguage:typescript",
+    "onLanguage:javascriptreact",
+    "onLanguage:typescriptreact"
+  ],
+  "main": "./dist/extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "npmPackageViewer.openInBrowser",
+        "title": "Open npm Page in Browser",
+        "category": "NPM Package Viewer"
+      },
+      {
+        "command": "npmPackageViewer.openInWebview",
+        "title": "Open npm Page in VS Code",
+        "category": "NPM Package Viewer"
+      }
+    ],
+    "submenus": [
+      {
+        "id": "npmPackageViewer.submenu",
+        "label": "NPM Package Viewer"
+      }
+    ],
+    "menus": {
+      "editor/context": [
+        {
+          "submenu": "npmPackageViewer.submenu",
+          "group": "navigation",
+          "when": "editorTextFocus && resourceLangId =~ /^(javascript|typescript|javascriptreact|typescriptreact)$/"
+        }
+      ],
+      "npmPackageViewer.submenu": [
+        {
+          "command": "npmPackageViewer.openInBrowser",
+          "group": "1_open"
+        },
+        {
+          "command": "npmPackageViewer.openInWebview",
+          "group": "1_open"
+        }
+      ]
+    }
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run build",
+    "build": "esbuild ./src/extension.ts --bundle --outfile=dist/extension.js --external:vscode --format=cjs --platform=node --sourcemap",
+    "watch": "esbuild ./src/extension.ts --bundle --outfile=dist/extension.js --external:vscode --format=cjs --platform=node --sourcemap --watch",
+    "lint": "tsc --noEmit",
+    "pretest": "tsc -p ./tsconfig.test.json",
+    "test": "node ./out-test/test/runTest.js"
+  },
+  "devDependencies": {
+    "@types/mocha": "^10.0.6",
+    "@types/node": "^20.11.0",
+    "@types/vscode": "^1.85.0",
+    "@vscode/test-electron": "^2.3.8",
+    "esbuild": "^0.20.0",
+    "mocha": "^10.3.0",
+    "typescript": "^5.3.3"
+  }
+}
