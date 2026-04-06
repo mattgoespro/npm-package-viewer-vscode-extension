@@ -11,7 +11,19 @@
       "outFiles": [
         "${workspaceFolder}/dist/**/*.js"
       ],
-      "preLaunchTask": "${defaultBuildTask}"
+      "preLaunchTask": "watch"
+    },
+    {
+      "name": "Run Extension (Build Once)",
+      "type": "extensionHost",
+      "request": "launch",
+      "args": [
+        "--extensionDevelopmentPath=${workspaceFolder}"
+      ],
+      "outFiles": [
+        "${workspaceFolder}/dist/**/*.js"
+      ],
+      "preLaunchTask": "build"
     },
     {
       "name": "Extension Tests",
@@ -24,7 +36,7 @@
       "outFiles": [
         "${workspaceFolder}/out-test/**/*.js"
       ],
-      "preLaunchTask": "npm: pretest"
+      "preLaunchTask": "pretest"
     }
   ]
 }
