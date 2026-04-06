@@ -20,6 +20,7 @@
     "davidanson.vscode-markdownlint",
     "eamodio.gitlens",
     "darkriszty.markdown-table-prettify",
-    "ibm.output-colorizer"
+    "ibm.output-colorizer",
+    "mattgoespro.npm-package-viewer"
   ]
 }
