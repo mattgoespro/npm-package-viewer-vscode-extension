@@ -29,8 +29,51 @@
         "command": "npmPackageViewer.openInWebview",
         "title": "Open npm Page in VS Code",
         "category": "NPM Package Viewer"
+      },
+      {
+        "command": "npmPackageViewer.goToPackageJson",
+        "title": "Go to package.json Dependency",
+        "category": "NPM Package Viewer"
       }
     ],
+    "configuration": {
+      "title": "NPM Package Viewer",
+      "properties": {
+        "npmPackageViewer.defaultAction": {
+          "type": "string",
+          "default": "browser",
+          "enum": [
+            "browser",
+            "webview"
+          ],
+          "enumDescriptions": [
+            "Open npm pages in the default browser",
+            "Open npm pages in a VS Code webview"
+          ],
+          "description": "Default action when clicking on a package."
+        },
+        "npmPackageViewer.registryUrl": {
+          "type": "string",
+          "default": "https://www.npmjs.com",
+          "description": "Base URL of the npm registry to link to."
+        },
+        "npmPackageViewer.showCodeLens": {
+          "type": "boolean",
+          "default": true,
+          "description": "Show CodeLens above import lines."
+        },
+        "npmPackageViewer.showHover": {
+          "type": "boolean",
+          "default": true,
+          "description": "Show hover information on import lines."
+        },
+        "npmPackageViewer.showStatusBarItem": {
+          "type": "boolean",
+          "default": true,
+          "description": "Show the package name in the status bar when the cursor is on an import line."
+        }
+      }
+    },
     "submenus": [
       {
         "id": "npmPackageViewer.submenu",
@@ -53,6 +96,10 @@
         {
           "command": "npmPackageViewer.openInWebview",
           "group": "1_open"
+        },
+        {
+          "command": "npmPackageViewer.goToPackageJson",
+          "group": "2_navigate"
         }
       ]
     }
