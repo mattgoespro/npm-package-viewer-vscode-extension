@@ -116,7 +116,7 @@ function getPackageContent(data: NpmPackageData, npmUrl: string): string {
   const readmeHtml = readme
     ? `<div class="readme">
         <h2>README</h2>
-        <div class="readme-content">${renderBasicMarkdown(readme)}</div>
+        <div class="readme-content">${renderReadme(readme)}</div>
       </div>`
     : "";
 
@@ -142,10 +142,12 @@ function getPackageContent(data: NpmPackageData, npmUrl: string): string {
   return baseHtml(data.name, body);
 }
 
-/** Very basic markdown → HTML for readme rendering */
-function renderBasicMarkdown(md: string): string {
-  let html = esc(md);
-  // Headers
+/** Sanitize readme content for webview display.
+ *  npm readmes are a mix of HTML and markdown — pass HTML through
+ *  and apply minimal markdown conversion for plain-text sections. */
+function renderReadme(md: string): string {
+  let html = md;
+  // Convert markdown headers (only lines that aren't already HTML)
   html = html.replace(/^######\s+(.+)$/gm, "<h6>$1</h6>");
   html = html.replace(/^#####\s+(.+)$/gm, "<h5>$1</h5>");
   html = html.replace(/^####\s+(.+)$/gm, "<h4>$1</h4>");
@@ -158,16 +160,15 @@ function renderBasicMarkdown(md: string): string {
   html = html.replace(/`([^`]+)`/g, "<code>$1</code>");
   // Bold
   html = html.replace(/\*\*(.+?)\*\*/g, "<strong>$1</strong>");
-  // Italic
-  html = html.replace(/\*(.+?)\*/g, "<em>$1</em>");
-  // Links (already escaped, so &quot; for quotes)
+  // Italic (avoid matching inside HTML attributes or URLs)
+  html = html.replace(/(?<![=/"'])\*([^*<>]+?)\*(?![/"'])/g, "<em>$1</em>");
+  // Markdown links
   html = html.replace(
     /\[([^\]]+)\]\(([^)]+)\)/g,
     '<a href="$2">$1</a>',
   );
-  // Line breaks → paragraphs
-  html = html.replace(/\n\n/g, "</p><p>");
-  html = `<p>${html}</p>`;
+  // Double newlines → paragraph breaks (only outside of HTML blocks)
+  html = html.replace(/\n\n(?!<)/g, "<br><br>");
   return html;
 }
 
